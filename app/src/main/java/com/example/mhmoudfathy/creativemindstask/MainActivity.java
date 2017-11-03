@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity  implements HolderInterface{
     public void getData(){
         ApiInterface apiInterface=retrofit.create(ApiInterface.class);
         Call<List<RepoModel>>  call= apiInterface.getRepoInfo();
-       // loading();
         binding.swipeRefreshLayout.setRefreshing(true);
         call.enqueue(new Callback<List<RepoModel>>() {
             @Override
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity  implements HolderInterface{
                 if (response.code()==200){
                     repoModels=response.body();
                     binding.container.setAdapter(genericAdapter);
-                    hideLoading();
+
                     binding.swipeRefreshLayout.setRefreshing(false);
                 }
 
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity  implements HolderInterface{
             @Override
             public void onFailure(Call<List<RepoModel>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "PleaseCheck Your network", Toast.LENGTH_SHORT).show();
-                hideLoading();
+
                 binding.swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -117,10 +116,7 @@ public class MainActivity extends AppCompatActivity  implements HolderInterface{
 
     public void setPagenation(){
         binding.container.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
+
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -171,32 +167,6 @@ public class MainActivity extends AppCompatActivity  implements HolderInterface{
     }
 
 
-    boolean isloading = false;
-    ProgressBar image;
 
-    public void loading() {
-        if (!isloading) {
-            isloading = true;
-            image = new ProgressBar(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            image.setLayoutParams(params);
-            LinearLayout loadingContainer = new LinearLayout(this);
-            loadingContainer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            loadingContainer.setId(R.id.loader);
-            loadingContainer.setBackgroundColor(Color.parseColor("#80000000"));
-            loadingContainer.setOrientation(LinearLayout.HORIZONTAL);
-            loadingContainer.addView(image);
-            loadingContainer.setGravity(Gravity.CENTER);
-            ((ViewGroup) getWindow().getDecorView()).addView(loadingContainer);
-        }
-
-    }
-
-    public void hideLoading(){
-        if(isloading) {
-            isloading = false;
-            ((ViewGroup) this.getWindow().getDecorView().getRootView()).removeView(findViewById(R.id.loader));
-        }
-    }
 
 }
