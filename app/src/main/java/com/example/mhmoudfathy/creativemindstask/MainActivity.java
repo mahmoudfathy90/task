@@ -2,6 +2,7 @@ package com.example.mhmoudfathy.creativemindstask;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -54,22 +55,10 @@ public class MainActivity extends AppCompatActivity  implements HolderInterface{
         buildRetrofit();
         getData();
         setRefreshLayout();
+        setPagenation();
     }
-//    public OkHttpClient setChache(){
-//
-//
-////            int cacheSize = 10 * 1024 * 1024;
-////            Cache cache = new Cache(this.getCacheDir(), cacheSize);
-//
-//            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//            OkHttpClient client = new OkHttpClient.Builder()
-//                    .writeTimeout(20, TimeUnit.SECONDS)
-//                    .readTimeout(20, TimeUnit.SECONDS)
-//                    .addInterceptor(interceptor).build();
-//            return client;
-//
-//    }
+
+
 
     public void buildRetrofit() {
         int cacheSize = 10 * 1024 * 1024;
@@ -122,6 +111,33 @@ public class MainActivity extends AppCompatActivity  implements HolderInterface{
                 Toast.makeText(MainActivity.this, "PleaseCheck Your network", Toast.LENGTH_SHORT).show();
                 hideLoading();
                 binding.swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    public void setPagenation(){
+        binding.container.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int x=10;
+                if (dy > x ) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.swipeRefreshLayout.setRefreshing(true);
+                        }
+                    },3000);
+
+
+                }
+                x=x+10;
+                binding.swipeRefreshLayout.setRefreshing(false);
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
