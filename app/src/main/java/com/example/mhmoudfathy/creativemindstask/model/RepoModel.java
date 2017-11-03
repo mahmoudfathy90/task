@@ -781,7 +781,7 @@ public class RepoModel implements Serializable
         this.defaultBranch = defaultBranch;
     }
 
-     class Owner implements Serializable
+    public class Owner implements Serializable
     {
 
         @SerializedName("login")
